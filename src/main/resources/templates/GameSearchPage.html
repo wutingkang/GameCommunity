@@ -1,0 +1,308 @@
+﻿<!doctype html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Basic page needs
+    ======================================-->
+	<title>哔哔搜游戏</title>
+	<meta charset="utf-8">
+	<meta name="author" content="">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+
+
+
+	<!-- Mobile specific meat
+    ==============================================-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<!-- Favicon
+    ============================================ -->
+
+	<!-- Template Fonts form google
+    =============================================-->
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+
+	<!-- Theme main CSS File
+    ==========================================================-->
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+	<link rel="stylesheet" href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}">
+	<link rel="stylesheet" href="../static/css/jquery.bxslider.css" th:href="@{/css/jquery.bxslider.css}">
+	<link rel="stylesheet" href="../static/css/style_GameSearch.css" th:href="@{/css/style_GameSearch.css}">
+
+	<!-- Mordernizer Js -->
+	<script src="../static/js/modernizr-2.8.3.min.js" th:src="@{/js/modernizr-2.8.3.min.js}"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]-->
+	<script src="../static/js/html5shiv.js" th:src="@{/js/html5shiv.js}"></script>
+	<script src="../static/js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+	<![endif]-->
+
+	<script src="http://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
+	<script>
+		$(function () {
+			$("#button").click(function () {
+				var replayBody = $("#replay");
+				var jump = "/game/flash?";
+				var html = " ";
+				$("#page").val(0);
+				var p = $("#page").val();
+				jump = jump + "type=" + $("#type").val() + "&";
+				jump = jump + "platform=" + $("#platform").val() + "&";
+				jump = jump + "net=" + $("#net").val() + "&";
+				jump = jump + "time=" + $("#time").val() + "&";
+				jump = jump + "page=" + $("#page").val();
+				//写一下ajax ！！！
+				$.ajax({
+					url: jump,
+					method: "GET"
+				}).done(function (msg) {
+					p = Number(p) + Number(msg.size);
+					$("#rpage").val(p);
+					$("#right").show();
+					$("#left").hide();
+					if(msg.size != 3 )  $("#right").hide();
+					replayBody.html(html);
+					for (var i = 0; i < msg.size; i++) {
+						html = html + '<div class="col-md-4 col-sm-6">';
+						html = html + '<div class="single-featured-properties">';
+						html = html + '<div class="properties-image" >';
+						html = html + '<a href="/game/' + msg.games[i].id;
+						html = html + '">';
+						html = html + '<img src ="/images/' + msg.games[i].banner;
+						html = html + '" alt="" />';
+						html = html + '</a>';
+						html = html + '</div>';
+						//分一下
+						html = html + '<div class="properties-include"><ul>';
+						html = html + '<li>';
+						html = html + '<i class="fa fa-home" ></i>' + msg.games[i].name + '</li>';
+						html = html + '</ul></div></div></div>';
+
+					}
+
+					replayBody.html(html);
+				});
+			});
+		});
+
+		$(function () {
+			$("#right").click(function () {
+				var replayBody = $("#replay");
+				var jump = "/game/flash?";
+				var html = " ";
+				var p = $("#page").val();
+				$("#left").show();
+				jump = jump + "type=" + $("#type").val() + "&";
+				jump = jump + "platform=" + $("#platform").val() + "&";
+				jump = jump + "net=" + $("#net").val() + "&";
+				jump = jump + "time=" + $("#time").val() + "&";
+				jump = jump + "page=" + $("#rpage").val();
+				//写一下ajax ！！！
+				$.ajax({
+					url: jump,
+					method: "GET"
+				}).done(function (msg) {
+					p = Number(p) + Number((msg.size));
+					$("#page").val(p);
+					replayBody.html(html);
+					$("#right").show();
+					if(msg.size != 3 )  $("#right").hide();
+					for (var i = 0; i < msg.size; i++) {
+						html = html + '<div class="col-md-4 col-sm-6">';
+						html = html + '<div class="single-featured-properties">';
+						html = html + '<div class="properties-image" >';
+						html = html + '<a href="/game/' + msg.games[i].id;
+						html = html + '">';
+						html = html + '<img src ="/images/' + msg.games[i].banner;
+						html = html + '" alt="" />';
+						html = html + '</a>';
+						html = html + '</div>';
+						//分一下
+						html = html + '<div class="properties-include"><ul>';
+						html = html + '<li>';
+						html = html + '<i class="fa fa-home" ></i>' + msg.games[i].name + '</li>';
+						html = html + '</ul></div></div></div>';
+
+					}
+					replayBody.html(html);
+				});
+			});
+		});
+
+
+
+		$(function () {
+			$("#left").click(function () {
+				var replayBody = $("#replay");
+				var jump = "/game/flash?";
+				var html = " ";
+				var p = Number($("#page").val())-3;
+
+				$("#page").val(p);
+				jump = jump + "type=" + $("#type").val() + "&";
+				jump = jump + "platform=" + $("#platform").val() + "&";
+				jump = jump + "net=" + $("#net").val() + "&";
+				jump = jump + "time=" + $("#time").val() + "&";
+				jump = jump + "page=" + $("#page").val();
+				//写一下ajax ！！！
+				$.ajax({
+					url: jump,
+					method: "GET"
+				}).done(function (msg) {
+					replayBody.html(html);
+					$("#right").show();
+					$("#left").show();
+					if($("#page").val() == 0)  $("#left").hide();
+					for (var i = 0; i < msg.size; i++) {
+						html = html + '<div class="col-md-4 col-sm-6">';
+						html = html + '<div class="single-featured-properties" >';
+						html = html + '<div class="properties-image" >';
+						html = html + '<a href="/game/' + msg.games[i].id;
+						html = html + '">';
+						html = html + '<img src ="/images/' + msg.games[i].banner;
+						html = html + '" alt="" />';
+						html = html + '</a>';
+						html = html + '</div>';
+						//分一下
+						html = html + '<div class="properties-include"><ul>';
+						html = html + '<li>';
+						html = html + '<i class="fa fa-home" ></i>' + msg.games[i].name + '</li>';
+						html = html + '</ul></div></div></div>';
+
+					}
+					replayBody.html(html);
+				});
+			});
+		});
+
+
+
+
+
+
+	</script>
+
+
+</head>
+<body >
+<!-- Property query area start -->
+<section class="property-query-area" >
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3 col-sm-6">
+				<div class="query-title">
+					<h2>寻找你喜欢的游戏吧！！</h2>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<form action="#">
+				<div class="col-md-3 col-sm-6">
+					<div class="single-query" >
+						<label>游戏类型</label>
+						<select name="Any" id="type" >
+							<option value="0" selected>任何</option>
+							<option value="1" th:value="${type1.queue}" th:each="type1:${type}" th:text="${type1.context}">角色扮演</option>
+						<!--<option value="2">FPS</option>
+							<option value="3">动作冒险</option>
+							<option value="4">运动竞技</option>
+							<option value="5">卡牌游戏</option> -->
+						</select>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="single-query">
+						<label>游戏平台</label>
+						<select id="platform">
+							<option value="0" selected>任何</option>
+							<option value="1" th:value="${plat1.queue}" th:each="plat1:${plat}" th:text="${plat1.context}">角色扮演</option>
+							<!--<option value="1">PC</option>-->
+							<!--<option value="2">PS4</option>-->
+							<!--<option value="3">XBOX</option>-->
+							<!--<option value="4">Nintendo Switch</option>-->
+							<!--<option value="5">Mobile</option>-->
+						</select>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="single-query">
+						<label>联网类型</label>
+						<select id="net">
+							<option value="0" selected>任何</option>
+							<option value="1" th:value="${net1.queue}" th:each="net1:${net}" th:text="${net1.context}">单机游戏</option>
+							<!--<option value="2">联网游戏</option>-->
+						</select>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="single-query">
+						<label>发售年份</label>
+						<select id="time">
+							<option value="0" selected>任何</option>
+							<option value="1" th:value="${time1.queue}" th:each="time1:${time}" th:text="${time1.context}">2017</option>
+							<!--<option value="2">2016</option>-->
+							<!--<option value="3">2015</option>-->
+							<!--<option value="4">2014</option>-->
+						</select>
+					</div>
+					<div class="query-submit-button pull-right">
+						<input id="button" type="button" value="给我搜！">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+<!--Property query area End-->
+
+<!--Start of Properties Area-->
+<section class="properties-area area-pading fix">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="properties-title">
+					<h2>SHOW TIME !!</h2>
+					<a  class="view-more" id="right"> →</a>
+					<a   class="view-more" id="left" type="hidden">← </a>
+					<input type="hidden" id="page" th:value="${page}">
+					<input type="hidden" id="rpage" value=0>
+				</div>
+			</div>
+		</div>
+		<div class="row" id="replay">
+			<!--<div class="col-md-4 col-sm-6" th:each="game:${games}" >-->
+				<!--<div class="single-featured-properties"  >-->
+					<!--<div class="properties-image">-->
+						<!--<a href="#" th:href="@{game/{id}(id=${game.id})}"><img src="../static/images/zld1.jpg" th:src="@{/images/{banner}(banner=${game.banner})}" alt=""></a>-->
+					<!--</div>-->
+
+					<!--<div class="properties-include">-->
+						<!--<ul>-->
+							<!--<li th:text="${game.name}"><i class="fa fa-home" ></i> 塞尔达传说</li>-->
+						<!--</ul>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+		</div>
+	</div>
+</section>
+<!-- End of Properties Area-->
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<!-- Main jQuery file -->
+<script src="../static/js/jquery-1.11.3.min.js" th:src="@{/js/jquery-1.11.3.min.js}"></script>
+<!-- Bootstrap Js -->
+<script src="../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<!-- wow js -->
+<script src="../static/js/wow.min.js" th:src="@{/js/wow.min.js}"></script>
+<!-- Initialize WOW js for Animation-->
+<script>
+	new WOW().init();
+</script>
+<!-- Theme jQuery Codes goes hear -->
+<script src="../static/js/script.js" th:src="@{/js/script.js}"></script>
+</body>
+<!-- Body End  -->
+</html>
+
